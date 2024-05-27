@@ -7,6 +7,13 @@ import java.net.Socket;
 import com.mawen.learn.basic.sockets.LengthFramer;
 
 /**
+ * Implement a TCP voting client that connects over a TCP socket to the voting server,
+ * send an inquiry followed by a vote, and then receives the inquiry and vote responses.
+ *
+ * <pre>{@code
+ *  java VoteClientTCP 127.0.0.1 8081
+ * }</pre>
+ *
  * @author <a href="1181963012mw@gmail.com">mawen12</a>
  * @since 2024/5/26
  */
@@ -33,7 +40,30 @@ public class VoteClientTCP {
 
 		// create an inquiry request (2nd arg = true)
 		VoteMsg msg = new VoteMsg(false, true, CANDIDATE_ID, 0);
+		byte[] encodedMsg = coder.toWire(msg);
 
+		// Send request
+		System.out.println("Sending Inquiry (" + encodedMsg.length + " bytes): ");
+		System.out.println(msg);
+		framer.frameMsg(encodedMsg, out);
 
+		// Now send a vote
+		msg.setInquiry(false);
+		encodedMsg = coder.toWire(msg);
+		System.out.println("Sending Vote (" + encodedMsg.length + " bytes): ");
+		framer.frameMsg(encodedMsg, out);
+
+		// Receive inquiry response
+		encodedMsg = framer.nextMsg();
+		msg = coder.fromWire(encodedMsg);
+		System.out.println("Received Response (" + encodedMsg.length + " bytes): ");
+		System.out.println(msg);
+
+		// Receive vote response
+		msg = coder.fromWire(framer.nextMsg());
+		System.out.println("Received Response (" + encodedMsg.length + " bytes): ");
+		System.out.println(msg);
+
+		socket.close();
 	}
 }
