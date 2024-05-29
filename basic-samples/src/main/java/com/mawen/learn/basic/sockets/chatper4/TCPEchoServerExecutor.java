@@ -3,12 +3,15 @@ package com.mawen.learn.basic.sockets.chatper4;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
+ * <pre>{@code
+ *  java TCPEchoServerExecutor 8081
+ * }</pre>
+ *
  * @author <a href="1181963012mw@gmail.com">mawen12</a>
  * @since 2024/5/28
  */
@@ -33,7 +36,8 @@ public class TCPEchoServerExecutor {
 		// Run forever, accepting and spawning a thread for each connection
 		while (true) {
 			Socket clientSocket = serverSocket.accept();
-			service.execute(new EchoProtocol(clientSocket,logger));
+//			service.execute(new EchoProtocol(clientSocket,logger));
+			service.execute(new CompressProtocol(clientSocket,logger));
 		}
 	}
 }

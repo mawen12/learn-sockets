@@ -3,7 +3,6 @@ package com.mawen.learn.basic.sockets;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.SocketException;
 
 /**
  * Loop forever, receive datagrams and then sending the same datagrams back to the client.
